@@ -1,0 +1,50 @@
+.App {
+  text-align: center;
+}
+
+/* @media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+} */
+
+.App-header {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: grey;
+}
+.spinner {
+  height: 200%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: rgb(255, 255, 255);
+  overflow-x: hidden;
+  overflow-y: hidden;
+  background-color: black;
+}
+
+.loader {
+  border: 10px solid #ff1a1a; /* Light grey */
+  border-top: 10px solid #999999; /* Blue */
+  border-bottom: 10px solid #999999; /* Blue */
+  border-radius: 10%;
+  width: 80px;
+  height: 80px;
+  animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}

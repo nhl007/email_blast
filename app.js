@@ -106,7 +106,7 @@ app.post('/submitHtml', (req, res) => {
 app.post('/sendemail', async (req, res) => {
   try {
     const template = htmlData.toString('base64');
-    const { subject, hostName, userName, password } = req.body;
+    const { subject, userName, clientId, clientSecret, accessToken } = req.body;
     await csvParsing();
     if (emails !== []) {
       emails.forEach((value, index) => {
@@ -118,12 +118,10 @@ app.post('/sendemail', async (req, res) => {
             service: 'gmail',
             auth: {
               type: 'OAuth2',
-              user: 'apar.asif.an@gmail.com',
-              clientId:
-                '514379903982-s90g9b2bridhffgnd5oldlpt18giahh3.apps.googleusercontent.com',
-              clientSecret: 'GOCSPX-TskNcNCNAQfAw12cEIFYTr5cDii',
-              accessToken:
-                'ya29.a0AVA9y1uky4VwVKGpK_UzjclGYeBaEZUnjnv3hPHfe8rDiMOzOQq-uWJpMD-G3L18XkFTabIwMFFBgjvAhvVbTZMak3FWESAPqmle2ZxGUcg3KZbiULbiffmA8q82Rw6yNiQodmb7b5mDOkYIHqYSK_vXQlbcaCgYKATASARESFQE65dr8BWwxlIuaKrll13JMuw9DIA0163',
+              user: userName,
+              clientId: clientId,
+              clientSecret: clientSecret,
+              accessToken: accessToken,
             },
           });
           // const transporter = nodemailer.createTransport({
@@ -145,25 +143,23 @@ app.post('/sendemail', async (req, res) => {
           };
           transporter.sendMail(mailOptions, function (error, info) {
             if (error) {
+              console.log(error);
               res.end('Please give correct info about your smtp sever');
             } else {
               console.log('Email sent: ' + info.response);
-              fs.unlink('./uploads/csvfile.csv', function (err) {
-                if (err) {
-                  return res.end('error');
-                } else {
-                  console.log('deleted');
-                  return res.end('success').status(200);
-                }
-              });
             }
           });
         }
       });
-    }
-    {
-      res.json('Error Occured !').status(400);
-    }
+      fs.unlink('./uploads/csvfile.csv', function (err) {
+        if (err) {
+          return res.end('error');
+        } else {
+          console.log('deleted');
+          return res.end('success').status(200);
+        }
+      });
+    } else res.json('Error Occured !').status(400);
   } catch (error) {
     res.json('Error').status(400);
   }

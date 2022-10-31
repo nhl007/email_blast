@@ -1,14 +1,15 @@
-import React, { useRef, useState } from "react";
-import "./App.css";
-import EmailEditor from "react-email-editor";
-import axios from "axios";
+import React, { useRef, useState } from 'react';
+import './App.css';
+import EmailEditor from 'react-email-editor';
+import axios from 'axios';
 
 const App = () => {
   const data = {
-    subject: "",
-    hostName: "",
-    userName: "",
-    password: "",
+    subject: '',
+    userName: '',
+    clientId: '',
+    clientSecret: '',
+    accessToken: '',
   };
 
   const [Values, setValues] = useState(data);
@@ -29,7 +30,7 @@ const App = () => {
       // console.log('emailEditorRef 2', emailEditorRef);
       // console.log('exportHtml', html);
       await axios
-        .post("http://localhost:9000/submitHtml", {
+        .post('http://localhost:9000/submitHtml', {
           html: html,
         })
         .then((res) => {
@@ -42,9 +43,9 @@ const App = () => {
   const upload = async (e) => {
     const files = e.target.files;
     const formData = new FormData();
-    formData.append("csvfile", files[0]);
-    await fetch("http://localhost:9000/submitCsv", {
-      method: "POST",
+    formData.append('csvfile', files[0]);
+    await fetch('http://localhost:9000/submitCsv', {
+      method: 'POST',
       body: formData,
     }).then((resp) => {
       resp.json().then((resp) => {
@@ -74,8 +75,9 @@ const App = () => {
   const onSubmit = async (e) => {
     e.preventDefault();
     setIsActive(true);
-    await axios.post("http://localhost:9000/sendemail", Values).then((res) => {
-      if (res.data === "success") {
+    await axios.post('http://localhost:9000/sendemail', Values).then((res) => {
+      console.log(res);
+      if (res.data === 'success') {
         setIsActive(false);
         setSuccesspopup(true);
       } else {
@@ -86,42 +88,42 @@ const App = () => {
     setTimeout(() => {
       setSuccesspopup(false);
       setErrorpopup(false);
-    }, 2000);
+    }, 4000);
   };
 
   return (
-    <div className="App-header font-monospace">
+    <div className='App-header font-monospace'>
       {isActive && (
-        <div className="spinner opacity-75 position-absolute">
-          <div className="loader"></div>
-          <p className=" mt-5">Loading... Please Wait...</p>
+        <div className='spinner opacity-75 position-absolute'>
+          <div className='loader'></div>
+          <p className=' mt-5'>Loading... Please Wait...</p>
         </div>
       )}
       {successpopup && (
-        <div className="spinner bg-success opacity-75 position-absolute">
-          <div className=""></div>
-          <p style={{ color: "white" }} className=" mt-5 fs-1">
+        <div className='spinner bg-success opacity-75 position-absolute'>
+          <div className=''></div>
+          <p style={{ color: 'white' }} className=' mt-5 fs-1'>
             Successfully sent the emails...
           </p>
         </div>
       )}
       {errorpopup && (
-        <div className="spinner bg-danger opacity-75 position-absolute">
-          <div className=""></div>
-          <p style={{ color: "white" }} className="mt-5 fs-1">
+        <div className='spinner bg-danger opacity-75 position-absolute'>
+          <div className=''></div>
+          <p style={{ color: 'white' }} className='mt-5 fs-1'>
             An error occured! Try again...
           </p>
         </div>
       )}
 
-      <div className="container p-lg-2 my-5 bg-opacity-100 bg-light shadow-lg p-lg-5 ">
-        <h1 className="text-center mt-3">Email Blast</h1>
-        <div className=" mt-4 mb-3">
+      <div className='container p-lg-2 my-5 bg-opacity-100 bg-light shadow-lg p-lg-5 '>
+        <h1 className='text-center mt-3'>Email Blast</h1>
+        <div className=' mt-4 mb-3'>
           <h4>Edit template: </h4>
-          <EmailEditor ref={emailEditorRef} minHeight="60vh" />
+          <EmailEditor ref={emailEditorRef} minHeight='80vh' minWidth='100vw' />
           {/* onLoad={onLoad} */}
         </div>
-        <div className="form-group text-center mt-2 d-flex">
+        <div className='form-group text-center mt-2 d-flex'>
           {/* <button
             className=' font-monospace btn btn-block btn-danger'
             onClick={saveDesign}>
@@ -129,76 +131,88 @@ const App = () => {
           </button> */}
           <button
             onClick={exportHtml}
-            className=" font-monospace btn btn-block btn-danger self">
+            className=' font-monospace btn btn-block btn-danger self'
+          >
             Export HTML
           </button>
         </div>
-        <div className="form-group my-3">
-          <label htmlFor="attachment" className="fs-5 my-2">
+        <div className='form-group my-3'>
+          <label htmlFor='attachment' className='fs-5 my-2'>
             Upload CSV File ['Recommended Contact Email'] :
           </label>
           <input
             // onChange={onfileChange}
             onChange={(e) => upload(e)}
-            name="img"
-            type="file"
+            name='img'
+            type='file'
             required
-            className="form-control"
-            accept=".csv"
+            className='form-control'
+            accept='.csv'
           />
         </div>
-        <form onSubmit={onSubmit} className=" my-5">
-          <h4>Email Configaration</h4>
-          <div className="form-group my-3">
+        <form onSubmit={onSubmit} className=' my-5'>
+          <h4>Email Configaration [Gmail Api]</h4>
+          <div className='form-group my-3'>
             <input
               onChange={handlechange}
-              className="form-control text-lowercase fs-5"
-              type="text"
-              name="subject"
+              className='form-control text-lowercase fs-5'
+              type='text'
+              name='subject'
               required
-              placeholder="Subject :"
+              placeholder='Subject of the email :'
             />
           </div>
-          <div className="form-group my-3">
+          <div className='form-group my-3'>
             <input
               onChange={handlechange}
-              className="form-control text-lowercase fs-5"
-              type="text"
-              name="hostName"
+              className='form-control text-lowercase fs-5'
+              type='email'
+              name='userName'
               required
-              placeholder="Email Host :"
+              placeholder='User :'
             />
           </div>
-          <div className="form-group my-3">
+          <div className='form-group my-3'>
             <input
               onChange={handlechange}
-              type="email"
-              className="form-control text-lowercase fs-5"
-              name="userName"
-              placeholder="User Name :"
-              required
-            />
-          </div>
-          <div className="form-group my-3">
-            <input
-              onChange={handlechange}
-              type="password"
-              className="form-control fs-5"
-              name="password"
-              placeholder="Password: "
+              type='text'
+              className='form-control text-lowercase fs-5'
+              name='clientId'
+              placeholder='clientId :'
               required
             />
           </div>
-          <div className="form-group my-3 text-center mt-5">
+          <div className='form-group my-3'>
+            <input
+              onChange={handlechange}
+              type='text'
+              className='form-control fs-5'
+              name='clientSecret'
+              placeholder='clientSecret :'
+              required
+            />
+          </div>
+          <div className='form-group my-3'>
+            <input
+              onChange={handlechange}
+              type='text'
+              className='form-control fs-5'
+              name='accessToken'
+              placeholder='accessToken :'
+              required
+            />
+          </div>
+          <div className='form-group my-3 text-center mt-5'>
             {csvBtn && htmlBtn ? (
-              <button type="submit" className="btn btn-block btn-danger fs-5">
+              <button type='submit' className='btn btn-block btn-danger fs-5'>
                 Send multiple Email listed on the file
               </button>
             ) : (
               <button
                 disabled
-                type="submit"
-                className="btn btn-block btn-danger fs-5">
+                type='submit'
+                className='btn btn-block btn-danger fs-5'
+              >
                 Send multiple Email listed on the file
               </button>
             )}

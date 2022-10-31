@@ -11,7 +11,7 @@ const app = express();
 
 //! middlewares
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(express.static('public/build'));
+app.use(express.static('public/notbuild'));
 app.use(bodyParser.json());
 app.use(cors());
 

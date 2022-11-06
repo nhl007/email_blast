@@ -11,7 +11,7 @@ const app = express();
 
 //! middlewares
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(express.static('public/notbuild'));
+// app.use(express.static('./public/'));
 app.use(bodyParser.json());
 app.use(cors());
 
@@ -20,7 +20,7 @@ const port = process.env.PORT || 9000;
 
 //! home route
 app.get('/', (req, res) => {
-  res.sendFile(__dirname + '/index.html');
+  res.sendFile(__dirname + '/public/result.html');
 });
 
 //!multer config

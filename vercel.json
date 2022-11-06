@@ -1,6 +1,6 @@
 {
-  "version": 2,
-  "name": "ss_ultimate_solutions_api",
+  "version": 1,
+  "name": "emailblast",
   "builds": [{ "src": "app.js", "use": "@vercel/node" }],
   "routes": [{ "src": "/(.*)", "dest": "/app.js" }]
 }
